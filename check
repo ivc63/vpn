@@ -342,3 +342,52 @@ if ($tunnel_srv_check -eq "$tunnel_srv_ip" -and $vpn_srv_connect -eq "True")
         $tunnel_srv_connect= Test-Port -computer $tunnel_srv_ip -port $tunnel_srv_port   
     }
 ###ВЫВОД РЕЗУЛЬТАТОВ
+Write-Host "ПРОВЕРКА ВРЕМЕНИ И ДАТЫ" -BackgroundColor White -ForegroundColor black
+"Дата        : " + $date_local
+"Время       : " + $time_local
+"Часовой пояс: " + $timezone_local
+if ($time_ntp -lt "60") {Write-Host "Время на компьютере соответствует серверу $ntp_srv" -BackgroundColor Green -ForegroundColor Black}
+if ($time_ntp -ge "60" -and $time_ntp -lt "3600") {Write-Host "Время на компьютере отличается от сервера $ntp_srv в пределах одного часа" -BackgroundColor Yellow -ForegroundColor Black}
+if ($time_ntp -ge "3600" -and $time_ntp -lt "86400") {Write-Host "Время на компьютере отличается от сервера $ntp_srv более чем на один час" -BackgroundColor Red -ForegroundColor Black}
+if ($time_ntp -ge "86400") {Write-Host "Дата на компьютере оличается от сервера $ntp_srv" -BackgroundColor Red -ForegroundColor Black}
+if ($time_ntp -eq "-1") { Write-Host "Сервер времени $ntp_srv недоступен, проверьте дату и время вручную" -BackgroundColor Yellow -ForegroundColor Black}
+if ($timezone_local -eq "(UTC+03:00)") {Write-Host "Часовой пояс установлен правильно" -BackgroundColor Green -ForegroundColor Black} else {Write-Host "Часовой пояс установлен неправильно" -BackgroundColor Red -ForegroundColor Black}
+if ($time_local_sync -eq "NoSync") {Write-Host "Синхронизация времени выключена" -BackgroundColor Green -ForegroundColor Black} else {Write-Host "Синхронизация времени включена" -BackgroundColor Green -ForegroundColor Black}
+""
+
+Write-Host "ПРОВЕРКА БРАНДМАУЭРА" -BackgroundColor White -ForegroundColor black
+if ($fw_service.Status -eq "Stopped") {Write-Host "Служба брандмауэра выключена" -BackgroundColor Green -ForegroundColor Black} else {Write-Host "Служба брандмауэра включена" -BackgroundColor Red -ForegroundColor Black}
+if ($fw_service_load.StartMode -eq "Disable") {Write-Host "Тип запуска службы брандмауэра - ОТКЛЮЧЕНО" -BackgroundColor Green -ForegroundColor Black} 
+if ($fw_service_load.StartMode -eq "Manual") {Write-Host "Тип запуска службы брандмауэра - ВРУЧНУЮ" -BackgroundColor Yellow -ForegroundColor Black} else {Write-Host "Тип запуска службы брандмауэра - АВТО" -BackgroundColor Red -ForegroundColor Black}
+""
+
+Write-Host "ПРОВЕРКА ДОПОЛНИТЕЛЬНОГО ПО" -BackgroundColor White -ForegroundColor black
+if ($avp_soft) {Write-Host "Антивирус Касперского установлен" -BackgroundColor Yellow -ForegroundColor black} else {Write-Host "Антивирус Касперского не установлен" -BackgroundColor Green -ForegroundColor black}
+if ($crypto_soft) {Write-Host "СКЗИ КриптоПро установлено" -BackgroundColor Yellow -ForegroundColor black} else {Write-Host "СКЗИ КриптоПро не установлено" -BackgroundColor Green -ForegroundColor black}
+""
+
+Write-Host "ПРОВЕРКА ДОСТУПНОСТИ КООРДИНАТОРА" -BackgroundColor White -ForegroundColor black
+if (!$vpn_path) {Write-Host "ПО ViPNet Client не установлено или не запущено" -BackgroundColor Red -ForegroundColor Black}
+else
+{
+if ($vpn_srv_connect -eq "True") {Write-Host "Координатор" $vpn_srv_name $vpn_srv_ip "доступен" -BackgroundColor Green -ForegroundColor Black} else {Write-Host "Координатор" $vpn_srv_name $vpn_srv_ip "недоступен" -BackgroundColor Red -ForegroundColor Black}
+}
+""
+
+Write-Host "ПРОВЕРКА НАЛИЧИЯ ТУННЕЛЯ" -BackgroundColor White -ForegroundColor black
+if (!$vpn_path) {Write-Host "Не удалось обнаружить запущенное или установленное ПО ViPNet Client" -BackgroundColor Red -ForegroundColor Black}
+else
+{
+if ($tunnel_srv_check1 -eq "$tunnel_srv_ip" -or $tunnel_srv_check2 -eq "$tunnel_srv_ip") {Write-Host "Туннель " $tunnel_srv_ip "прописан" -BackgroundColor Green -ForegroundColor Black} else {Write-Host "Туннель" $tunnel_srv_ip "отсутствует" -BackgroundColor Red -ForegroundColor Black}
+}
+""
+
+Write-Host "ПРОВЕРКА НАСТРОЕК БРАУЗЕРА" -BackgroundColor White -ForegroundColor black
+if ($IE_Proxy -eq "1") {Write-Host "Прокси-сервер в IE отключен" -BackgroundColor Green -ForegroundColor Black}
+if ($IE_Proxy -eq "3") {Write-Host "Прокси-сервер в IE включен" -BackgroundColor Red -ForegroundColor Black}
+if ($IE_Proxy -eq "5" -or $IE_Proxy -eq "9") {Write-Host "Автоопределение прокси-сервера в IE включено" -BackgroundColor Yellow -ForegroundColor Black}
+if ($IE_Proxy -ne "1" -and $IE_Proxy -ne "3" -and $IE_Proxy -ne "5" -and $IE_Proxy -ne "9") {Write-Host "Настройки IE определить не удалось :(" -BackgroundColor Yellow -ForegroundColor Black}
+""
+
+Write-Host "ПРОВЕРКА СОДЕНИНЕНИЯ С ТУННЕЛЕМ" -BackgroundColor White -ForegroundColor black
+if ($tunnel_srv_connect.Open -eq "True") {Write-Host "Туннель" $tunnel_srv_ip ":" $tunnel_srv_port "доступен" -BackgroundColor Green -ForegroundColor Black} else {Write-Host "Туннель" $tunnel_srv_ip ":" $tunnel_srv_port "недоступен" -BackgroundColor Red -ForegroundColor Black}
