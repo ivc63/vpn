@@ -385,9 +385,10 @@ if ($tunnel_srv_check1 -eq "$tunnel_srv_ip" -or $tunnel_srv_check2 -eq "$tunnel_
 Write-Host "ПРОВЕРКА НАСТРОЕК БРАУЗЕРА" -BackgroundColor White -ForegroundColor black
 if ($IE_Proxy -eq "1") {Write-Host "Прокси-сервер в IE отключен" -BackgroundColor Green -ForegroundColor Black}
 if ($IE_Proxy -eq "3") {Write-Host "Прокси-сервер в IE включен" -BackgroundColor Red -ForegroundColor Black}
+if ($IE_Proxy -eq "3" -or $IE_Proxy -eq "11") {Write-Host "Прокси-сервер и автоопределение прокси-сервера в IE включены" -BackgroundColor Red -ForegroundColor Black}
 if ($IE_Proxy -eq "5" -or $IE_Proxy -eq "9") {Write-Host "Автоопределение прокси-сервера в IE включено" -BackgroundColor Yellow -ForegroundColor Black}
 if ($IE_Proxy -ne "1" -and $IE_Proxy -ne "3" -and $IE_Proxy -ne "5" -and $IE_Proxy -ne "9") {Write-Host "Настройки IE определить не удалось :(" -BackgroundColor Yellow -ForegroundColor Black}
 ""
 
-Write-Host "ПРОВЕРКА СОДЕНИНЕНИЯ С ТУННЕЛЕМ" -BackgroundColor White -ForegroundColor black
+Write-Host "ПРОВЕРКА СОЕДИНЕНИЯ С ТУННЕЛЕМ" -BackgroundColor White -ForegroundColor black
 if ($tunnel_srv_connect.Open -eq "True") {Write-Host "Туннель" $tunnel_srv_ip ":" $tunnel_srv_port "доступен" -BackgroundColor Green -ForegroundColor Black} else {Write-Host "Туннель" $tunnel_srv_ip ":" $tunnel_srv_port "недоступен" -BackgroundColor Red -ForegroundColor Black}
