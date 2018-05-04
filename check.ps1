@@ -282,8 +282,8 @@ $time_local = (Get-Date).ToString('HH:mm')
 $timezone_local = [TimeZoneInfo]::Local.DisplayName | %{ $_.Split(" ")[0]; }
 $time_local_sync = (get-ItemProperty -Path Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\W32Time\Parameters).Type
 
-$time_ntp = w32tm /stripchart /computer:$ntp_srv /samples:3
-[string]$time_ntp = $time_ntp[5]
+$time_ntp_tmp = w32tm /stripchart /computer:$ntp_srv /samples:3
+[string]$time_ntp = $time_ntp_tmp[5]
 $ntp_srv_status=$time_ntp.IndexOf("d:")
 if ($ntp_srv_status -ne "-1")
 {
@@ -291,7 +291,7 @@ $time_ntp = $time_ntp.Split(":")[4]
 $time_ntp = $time_ntp.Split(".")[0]
 [int]$time_ntp = $time_ntp.Substring(1.)
 }
-else [int]$time_ntp = -1
+else {[int]$time_ntp = -1}
 
 ###ПРОВЕРКА IE
 
@@ -316,7 +316,7 @@ $vpn_srv_connect = Test-Connection $ip_coord_vipnet -count 2 -quiet -ErrorAction
 ###ПРОВЕРКА НАЛИЧИЯ ТУННЕЛЯ
 $vpn_srv_tunnel1 = Get-Content "$vpn_path\ipliradr.do$" | Select-String -Pattern $vpn_srv_id2 | Select-String -Pattern " S:" | Select-String -NotMatch "-" |%{($_ -split "[ S:]")[4]}
 $vpn_srv_tunnel2 = Get-Content "$vpn_path\ipliradr.do$" | Select-String -Pattern $vpn_srv_id2 | Select-String -Pattern " S:" | Select-String -Pattern "-" |%{($_ -split "[ S:]")[4]}
-$tunnel_srv_check1 = $vpn_srv_tunnel1 | Select-String -Pattern $tunnel_srv_ip
+[string]$tunnel_srv_check1 = $vpn_srv_tunnel1 | Select-String -Pattern $tunnel_srv_ip
 foreach ($temp in $vpn_srv_tunnel2)
 {
 $x= $temp.Split("-")[0]
