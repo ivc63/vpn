@@ -346,11 +346,11 @@ Write-Host "ПРОВЕРКА ВРЕМЕНИ И ДАТЫ" -BackgroundColor White 
 "Дата        : " + $date_local
 "Время       : " + $time_local
 "Часовой пояс: " + $timezone_local
-if ($time_ntp -lt "60") {Write-Host "Время на компьютере соответствует серверу $ntp_srv" -BackgroundColor Green -ForegroundColor Black}
 if ($time_ntp -ge "60" -and $time_ntp -lt "3600") {Write-Host "Время на компьютере отличается от сервера $ntp_srv в пределах одного часа" -BackgroundColor Yellow -ForegroundColor Black}
 if ($time_ntp -ge "3600" -and $time_ntp -lt "86400") {Write-Host "Время на компьютере отличается от сервера $ntp_srv более чем на один час" -BackgroundColor Red -ForegroundColor Black}
 if ($time_ntp -ge "86400") {Write-Host "Дата на компьютере оличается от сервера $ntp_srv" -BackgroundColor Red -ForegroundColor Black}
 if ($time_ntp -eq "-1") { Write-Host "Сервер времени $ntp_srv недоступен, проверьте дату и время вручную" -BackgroundColor Yellow -ForegroundColor Black}
+if ($time_ntp -lt "60" -and $time_ntp -ge "0") {Write-Host "Время на компьютере соответствует серверу $ntp_srv" -BackgroundColor Green -ForegroundColor Black}
 if ($timezone_local -eq "(UTC+03:00)") {Write-Host "Часовой пояс установлен правильно" -BackgroundColor Green -ForegroundColor Black} else {Write-Host "Часовой пояс установлен неправильно" -BackgroundColor Red -ForegroundColor Black}
 if ($time_local_sync -eq "NoSync") {Write-Host "Синхронизация времени выключена" -BackgroundColor Green -ForegroundColor Black} else {Write-Host "Синхронизация времени включена" -BackgroundColor Green -ForegroundColor Black}
 ""
