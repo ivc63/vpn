@@ -259,5 +259,10 @@ function Test-Port{
         $report  
     } 
 }
-
+###ОПРЕДЕЛЕНИЕ ПЕРЕМЕННЫХ
+"Введите ip-адрес туннеля"
+$tunnel_srv_ip = Read-Host
+"Введите TCP-порт туннеля"
+$tunnel_srv_port = Read-Host
+Test-Port -computer $tunnel_srv_ip -port $tunnel_srv_port
 Read-Host -Prompt "Press Enter to continue"
